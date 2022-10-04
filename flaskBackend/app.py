@@ -37,6 +37,9 @@ class dispositivos(db.Model):
 def hello_world():
     dsp =  dispositivos.query.first()
     return render_template("home.html",disp=dsp)
+@app.route("/test")
+def hello_world():
+    return "test"
 
 @app.route('/handle_data', methods=['POST'])
 def handle_data():
