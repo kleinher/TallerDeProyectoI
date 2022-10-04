@@ -1,13 +1,15 @@
 from flask import Flask, render_template, request
 from flask_sqlalchemy import SQLAlchemy
+from flask_marshmallow import Marshmallow
 
 app = Flask(__name__)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///dispositivos.sqlite3'
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-db = SQLAlchemy(app)
 
-class dispositivos(db.Model):
+db = SQLAlchemy(app)
+ma = Marshmallow(app)
+class Dispositivos(db.Model):
     _id = db.Column("id",db.Integer,primary_key=True)
     luz_1 = db.Column(db.Boolean)
     luz_2 = db.Column(db.Boolean)
@@ -26,6 +28,10 @@ class dispositivos(db.Model):
         self.sensor_luminosidad = False
         self.sensor_movimiento = False
 
+class DispositivosSchema(ma.SQLAlchemySchema):
+    class Meta:
+        model = Dispositivos
+
 #@app.route("/test")
 #def test():
 #    test =  users.query.filter_by(name="hernan").first()
@@ -35,15 +41,17 @@ class dispositivos(db.Model):
 
 @app.route("/")
 def hello_world():
-    dsp =  dispositivos.query.first()
+    dsp =  Dispositivos.query.first()
     return render_template("home.html",disp=dsp)
 @app.route("/test")
-def hello_world():
-    return "test"
+def test():
+    dsp = Dispositivos.query.first()
+    disp_schema = DispositivosSchema()
+    return disp_schema.dump(dsp)
 
 @app.route('/handle_data', methods=['POST'])
 def handle_data():
-    dsp =  dispositivos.query.first()
+    dsp =  Dispositivos.query.first()
     try:
         luz_1 = request.form['luz_1']
         if luz_1 == 'on':
@@ -59,7 +67,7 @@ def handle_data():
 @app.before_first_request
 def create_tables():
     db.create_all()
-    dispositivo = dispositivos(False)
+    dispositivo = Dispositivos(False)
     db.session.add(dispositivo)
     db.session.commit()
 
