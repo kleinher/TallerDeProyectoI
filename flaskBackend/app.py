@@ -27,11 +27,18 @@ class Dispositivos(db.Model):
         self.sensor_intensidad = False
         self.sensor_luminosidad = False
         self.sensor_movimiento = False
-
+   
 class DispositivosSchema(ma.SQLAlchemySchema):
     class Meta:
         model = Dispositivos
-
+    _id = ma.auto_field()
+    luz_1 = ma.auto_field()
+    luz_2 = ma.auto_field()
+    luz_3 = ma.auto_field()
+    luz_4 = ma.auto_field()
+    sensor_movimiento = ma.auto_field()
+    sensor_luminosidad = ma.auto_field()
+    sensor_intensidad = ma.auto_field()
 #@app.route("/test")
 #def test():
 #    test =  users.query.filter_by(name="hernan").first()
@@ -42,12 +49,16 @@ class DispositivosSchema(ma.SQLAlchemySchema):
 @app.route("/")
 def hello_world():
     dsp =  Dispositivos.query.first()
+    
     return render_template("home.html",disp=dsp)
 @app.route("/test")
 def test():
     dsp = Dispositivos.query.first()
+    app.logger.info('dispositivos: %s',dsp)
     disp_schema = DispositivosSchema()
-    return disp_schema.dump(dsp)
+    dump = disp_schema.dump(dsp)
+    app.logger.info('dump: %s',dsp)
+    return dump
 
 @app.route('/handle_data', methods=['POST'])
 def handle_data():
