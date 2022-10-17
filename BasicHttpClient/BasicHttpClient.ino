@@ -15,12 +15,12 @@
 #include <WiFiClient.h>
 SoftwareSerial portOne(D7, D8); // RX,TX
 ESP8266WiFiMulti WiFiMulti;
-
+byte xorTemp;
 void setup() {
 pinMode(LED_BUILTIN, OUTPUT);
 
-  Serial.begin(115200);
-  portOne.begin(115200);
+  Serial.begin(9600);
+  portOne.begin(9600);
   // Serial.setDebugOutput(true);
 
 
@@ -29,7 +29,7 @@ pinMode(LED_BUILTIN, OUTPUT);
     Serial.printf("[SETUP] WAIT %d...\n", t);
     Serial.flush();
     portOne.flush();
-    delay(300);
+    delay(1000);
   }
 
   WiFi.mode(WIFI_STA);
@@ -57,6 +57,16 @@ void loop() {
         // file found at server
         if (httpCode == HTTP_CODE_OK || httpCode == HTTP_CODE_MOVED_PERMANENTLY) {
           String payload = http.getString();
+          
+          
+          uint8_t xorTemp = uint8_t(payload.charAt(0));
+          for(int i = 1; i < payload.length() - 1; i++){
+             xorTemp = xorTemp + uint8_t(payload.charAt(i));
+          }
+          int length = payload.length();
+          
+
+          //payload = payload+"*"+String(xorTemp, HEX);
           Serial.println(payload); 
           portOne.println(payload); 
         }
@@ -70,5 +80,5 @@ void loop() {
   }
   pinMode(LED_BUILTIN, OUTPUT);
   digitalWrite(LED_BUILTIN, HIGH);
-  delay(1000);
+  delay(5000);
 }
