@@ -1,94 +1,51 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-	<title>Control</title>
-	</head>
-	<body>
-		<h1>Controles</h1>
-		<form action="{{ url_for('handle_data') }}" method = "post">
-			<div class="row">
-				<div class="col">
-					{% if disp.luz_1 %}
-						<p>Luz 1 <input type="checkbox" 
-									 name="luz_1" 
-									 checked ></p>
-					{% else %}
-						<p>Luz 1 <input type="checkbox" 
-								         name="luz_1"></p>
-					{% endif %}
-				</div>
-				<div class="col">
-					{% if disp.luz_2 %}
-						<p>Luz 2 <input type="checkbox" 
-									 	name="luz_2" 
-									 	checked ></p>
-					{% else %}
-						<p>Luz 2 <input type="checkbox" 
-									 	 name="luz_2"></p>
-					{% endif %}
-				</div>
-				<div class="col">
-					{% if disp.luz_3 %}
-						<p>Luz 3 <input type="checkbox" 
-										name="luz_3" 
-										checked ></p>
-					{% else %}
-						<p>Luz 3 <input type="checkbox" 
-										 name="luz_3"></p>
-					{% endif %}
-				</div>
-				<div class="col">
-					{% if disp.luz_4 %}
-						<p>Luz 4 <input type="checkbox" 
-									 	name="luz_4" 
-									 	checked ></p>
-					{% else %}
-						<p>Luz 4 <input type="checkbox" 
-									 	name="luz_4"></p>
-					{% endif %}</div>
-			  	</div>
-			
-			
-				  <div class="container">
-					<div class="row">
-					  <div class="col-sm">
-						{% if disp.sensor_intensidad %}
-							<p>sensor_intensidad <input type="checkbox" 
-														name="sensor_intensidad" 
-														checked ></p>
-						{% else %}
-							<p>sensor_intensidad <input type="checkbox" 
-								 						name="sensor_intensidad"></p>
-						{% endif %}
-					  </div>
-					  <div class="col-sm">
-						{% if disp.sensor_movimiento %}
-								<p>sensor_movimiento <input type="checkbox" 
-								 							name="sensor_movimiento" 
-								 							checked ></p>
-						{% else %}
-							<p>sensor_movimiento <input type="checkbox" 
-								 						name="sensor_movimiento"></p>
-						{% endif %}
-					  </div>
-					  <div class="col-sm">
-						{% if disp.sensor_luminosidad %}
-							<p>sensor_luminosidad<input type="checkbox" 
-														 name="sensor_luminosidad" 
-								 						checked ></p>
-						{% else %}
-							<hp>sensor_luminosidad <input type="checkbox" 
-								 						  name="sensor_luminosidad"></p>
-						{% endif %}
-					  </div>
-					</div>
-				  </div>
-			
-			
-			
-			
-			<input type="submit" value="Submit">
-		</form>
-	</body>
+        <title>Control</title>
+        </head>
+        <body>
+                <h1>Controles</h1>
+                <form action="{{ url_for('handle_data') }}" method = "post">
+                        {% if disp.luz_1 %}
+                                <h2>Luz 1 <input type="checkbox" 
+                                                                 name="luz_1" 
+                                                                 checked ></h2>
+                        {% else %}
+                                <h2>Luz 1 <input type="checkbox" 
+                                                                 name="luz_1"></h2>
+                        {% endif %}
+                        {% if disp.led %}
+                                <h2>Led <input type="checkbox" 
+                                                                 name="led" 
+                                                                 checked ></h2>
+                        {% else %}
+                                <h2>Led <input type="checkbox" 
+                                                                 name="led"></h2>
+                        {% endif %}
+                        {% if disp.sensor_intensidad %}
+                                <h2>Intensidad Led <input type="range" min="1" max="100" value="50" class="slider" id="myRange"></h2>
+  									
+								
+                        {% else %}
+                                <h2>Intensidad Led <input type="range" min="1" max="100" value="50" class="slider" id="myRange"></h2>
+                        {% endif %}
+                        {% if disp.sensor_movimiento %}
+                                <h2>sensor_movimiento <input type="checkbox" 
+                                                                 name="sensor_movimiento" 
+                                                                 checked ></h2>
+                        {% else %}
+                                <h2>sensor_movimiento <input type="checkbox" 
+                                                                 name="sensor_movimiento"></h2>
+                        {% endif %}
+                        {% if disp.sensor_luminosidad %}
+                                <h2>sensor_luminosidad<input type="checkbox" 
+                                                                 name="sensor_luminosidad" 
+                                                                 checked ></h2>
+                        {% else %}
+                                <h2>sensor_luminosidad <input type="checkbox" 
+                                                                 name="sensor_luminosidad"></h2>
+                        {% endif %}
+                        <input type="submit" value="Submit">
+                </form>
+        </body>
 </html>

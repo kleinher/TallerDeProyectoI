@@ -12,19 +12,13 @@ ma = Marshmallow(app)
 class Dispositivos(db.Model):
     _id = db.Column("id",db.Integer,primary_key=True)
     luz_1 = db.Column(db.Boolean)
-    luz_2 = db.Column(db.Boolean)
-    luz_3 = db.Column(db.Boolean)
-    luz_4 = db.Column(db.Boolean)
+    led = db.Column(db.Boolean)
     sensor_movimiento = db.Column(db.Boolean)
     sensor_luminosidad = db.Column(db.Boolean)
-    sensor_intensidad = db.Column(db.Boolean)
 
     def __init__(self,luz_1):
         self.luz_1 = luz_1
-        self.luz_2 = False
-        self.luz_3 = False
-        self.luz_4 = False
-        self.sensor_intensidad = False
+        self.led = False
         self.sensor_luminosidad = False
         self.sensor_movimiento = False
    
@@ -33,23 +27,16 @@ class DispositivosSchema(ma.SQLAlchemySchema):
         model = Dispositivos
     _id = ma.auto_field()
     luz_1 = ma.auto_field()
-    luz_2 = ma.auto_field()
-    luz_3 = ma.auto_field()
-    luz_4 = ma.auto_field()
+    led = ma.auto_field()
     sensor_movimiento = ma.auto_field()
     sensor_luminosidad = ma.auto_field()
-    sensor_intensidad = ma.auto_field()
-#@app.route("/test")
-#def test():
-#    test =  users.query.filter_by(name="hernan").first()
-#    test.email = "test"
-#    db.session.commit()
-#    return f"<p>nombre:{test.name}, apellido:{test.email}</p>"
+
 
 @app.route("/")
 def hello_world():
     dsp =  Dispositivos.query.filter(Dispositivos._id == 1).first()
     return render_template("home.html",disp=dsp)
+
 @app.route("/test")
 def test():
     dsp = Dispositivos.query.filter(Dispositivos._id == 1).first()
@@ -60,7 +47,7 @@ def test():
 
 @app.route('/handle_data', methods=['POST'])
 def handle_data():
-    dispositivos_validos = ['luz_1','luz_2','luz_3','luz_4','sensor_movimiento','sensor_luminosidad','sensor_intensidad',]
+    dispositivos_validos = ['luz_1','led','sensor_movimiento','sensor_luminosidad']
     checkValues(dispositivos_validos,request.form)
     return redirect(url_for('hello_world'))
 
