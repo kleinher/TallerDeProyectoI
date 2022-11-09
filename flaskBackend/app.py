@@ -15,13 +15,15 @@ class Dispositivos(db.Model):
     led = db.Column(db.Boolean)
     sensor_movimiento = db.Column(db.Boolean)
     sensor_luminosidad = db.Column(db.Boolean)
+    sensor_intensidad = db.Column(db.Integer)
 
     def __init__(self,luz_1):
         self.luz_1 = luz_1
         self.led = False
         self.sensor_luminosidad = False
         self.sensor_movimiento = False
-   
+        self.sensor_intensidad = 0
+
 class DispositivosSchema(ma.SQLAlchemySchema):
     class Meta:
         model = Dispositivos
@@ -30,12 +32,14 @@ class DispositivosSchema(ma.SQLAlchemySchema):
     led = ma.auto_field()
     sensor_movimiento = ma.auto_field()
     sensor_luminosidad = ma.auto_field()
+    sensor_intensidad = ma.auto_field()
 
 
 @app.route("/")
 def hello_world():
     dsp =  Dispositivos.query.filter(Dispositivos._id == 1).first()
-    return render_template("home.html",disp=dsp)
+    print(dsp.sensor_intensidad)  
+    return render_template("home.html",disp=dsp,intensidad=dsp.sensor_intensidad)
 
 @app.route("/test")
 def test():
@@ -47,7 +51,7 @@ def test():
 
 @app.route('/handle_data', methods=['POST'])
 def handle_data():
-    dispositivos_validos = ['luz_1','led','sensor_movimiento','sensor_luminosidad']
+    dispositivos_validos = ['luz_1','led','sensor_movimiento','sensor_luminosidad','sensor_intensidad']
     checkValues(dispositivos_validos,request.form)
     return redirect(url_for('hello_world'))
 
@@ -55,10 +59,13 @@ def checkValues(dispositivos_validos,form):
     dato_base =  Dispositivos.query.filter(Dispositivos._id == 1).first()
     try:
         for d in dispositivos_validos:
-            if d in form:
-                setattr(dato_base, d,True)
+            if d=='sensor_intensidad':
+                setattr(dato_base, d,form.to_dict()['intensidad'])
             else:
-                setattr(dato_base, d,False)
+                if d in form:
+                    setattr(dato_base, d,True)
+                else:
+                    setattr(dato_base, d,False)
         db.session.commit()
     except Exception:
         pass 

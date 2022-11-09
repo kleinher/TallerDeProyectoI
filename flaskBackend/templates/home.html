@@ -22,13 +22,10 @@
                                 <h2>Led <input type="checkbox" 
                                                                  name="led"></h2>
                         {% endif %}
-                        {% if disp.sensor_intensidad %}
-                                <h2>Intensidad Led <input type="range" min="1" max="100" value="50" class="slider" id="myRange"></h2>
-  									
-								
-                        {% else %}
-                                <h2>Intensidad Led <input type="range" min="1" max="100" value="50" class="slider" id="myRange"></h2>
-                        {% endif %}
+ 
+                        <h2>Intensidad Led <input type="range" min="1" max="100" value={{intensidad}} class="slider" id="myRange" name="intensidad"> </h2>
+
+
                         {% if disp.sensor_movimiento %}
                                 <h2>sensor_movimiento <input type="checkbox" 
                                                                  name="sensor_movimiento" 
