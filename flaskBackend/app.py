@@ -37,8 +37,7 @@ class DispositivosSchema(ma.SQLAlchemySchema):
 
 @app.route("/")
 def hello_world():
-    dsp =  Dispositivos.query.filter(Dispositivos._id == 1).first()
-    print(dsp.sensor_intensidad)  
+    dsp =  Dispositivos.query.filter(Dispositivos._id == 1).first() 
     return render_template("home.html",disp=dsp,intensidad=dsp.sensor_intensidad)
 
 @app.route("/test")
@@ -48,6 +47,21 @@ def test():
     disp_schema = DispositivosSchema()
     dump = disp_schema.dump(dsp)
     return dump
+
+@app.route('/encender-luz', methods=['POST'])
+def encender_luz():
+    print("luz")
+    return "test"
+    
+@app.route('/encender-led', methods=['POST'])
+def encender_led():
+    print("led")
+    return "test"
+
+@app.route('/encender-sensores', methods=['POST'])
+def encender_sensores():
+    print("sensores")
+    return "test"
 
 @app.route('/handle_data', methods=['POST'])
 def handle_data():
