@@ -18,27 +18,40 @@
      <div class="d-flex justify-content-center align-items-center h-100">
              <div class="text-white">
                      <h1 class="mb-3">Control</h1>
-                     <a class="btn btn-outline-light btn-lg" id="luz" onclick="encender_luz()" role="submit" 
+                     <a class="btn btn-outline-light btn-lg" id="luz" onclick="toggle('luz_1')" role="submit" 
                      >Luz</a>
              </div>
      </div>
      <div class="d-flex justify-content-center align-items-center h-100">
              <div class="text-white">
                      <h1 class="mb-3"></h1>
-                     <a class="btn btn-outline-light btn-lg" id="led" onclick="encender_led()" role="submit" 
+                     <a class="btn btn-outline-light btn-lg" id="led" onclick="toggle('led')" role="submit" 
                      >Led</a>
              </div>
      </div>
      <div class="d-flex justify-content-center align-items-center h-100">
              <div class="text-white">
                      <h1 class="mb-3"></h1>
-                     <a class="btn btn-outline-light btn-lg" id="sensores" onclick="encender_sensores()" role="submit"  checked
-                     >Sensores</a>
+                     <a class="btn btn-outline-light btn-lg" id="sensores" onclick="toggle('sensor_movimiento')" role="submit"  checked
+                     >Sensor Movimiento</a>
              </div>
      </div>
      <div class="d-flex justify-content-center align-items-center h-100">
+             <div class="text-white">
+                     <h1 class="mb-3"></h1>
+                     <a class="btn btn-outline-light btn-lg" id="sensores" onclick="toggle('sensor_luminosidad')" role="submit"  checked
+                     >Sensor Luminosidad</a>
+             </div>
+     </div>
+     <div class="d-flex justify-content-center align-items-center h-100">
+        
+        
         <div class="text-white">
-        <input type="range" class="form-range" min="0" max="100" id="customRange2">
+                     <h1 class="mb-3"></h1>
+                     <a class="btn btn-outline-light btn-lg" id="sensores" onclick="encender_sensores()" role="submit"  checked
+                     >Intencidad Led <input type="range" class="form-range" min="0" max="100" id="customRange2"></a>
+
+             </div>
         </div>
     </div>
     </div>
@@ -54,25 +67,13 @@
 
 <script type="text/javascript">
 
-        function encender_luz(){
-                fetch(`${window.location}/encender-luz`,{
+        function toggle(test){
+                fetch(`${window.location}/handle_data?to_turn=${test}`,{
                         method: "POST"
                 })
 
         }
-        function encender_led(){
-                fetch(`${window.location}/encender-led`,{
-                        method: "POST"
-                })
-
-        }
-        function encender_sensores(){
-                fetch(`${window.location}/encender-sensores`,{
-                        method: "POST"
-                })
-
-        }
-
+        
 </script>
 
 {% endblock %}

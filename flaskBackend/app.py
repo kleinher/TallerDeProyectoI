@@ -48,14 +48,18 @@ def test():
     dump = disp_schema.dump(dsp)
     return dump
 
-@app.route('/encender-luz', methods=['POST'])
-def encender_luz():
-    print("luz")
+@app.route('/toggle', methods=['POST'])
+def toggle():
+    print(request.args.to_dict())
     return "test"
     
 @app.route('/encender-led', methods=['POST'])
 def encender_led():
-    print("led")
+    dato_base =  Dispositivos.query.filter(Dispositivos._id == 1).first()
+
+    setattr(dato_base, d,True)
+    setattr(dato_base, d,False)
+    db.session.commit()
     return "test"
 
 @app.route('/encender-sensores', methods=['POST'])
@@ -66,23 +70,20 @@ def encender_sensores():
 @app.route('/handle_data', methods=['POST'])
 def handle_data():
     dispositivos_validos = ['luz_1','led','sensor_movimiento','sensor_luminosidad','sensor_intensidad']
-    checkValues(dispositivos_validos,request.form)
-    return redirect(url_for('hello_world'))
+    checkValues(dispositivos_validos,request.args.to_dict())
+    return "test"
 
 def checkValues(dispositivos_validos,form):
     dato_base =  Dispositivos.query.filter(Dispositivos._id == 1).first()
-    try:
-        for d in dispositivos_validos:
-            if d=='sensor_intensidad':
-                setattr(dato_base, d,form.to_dict()['intensidad'])
-            else:
-                if d in form:
-                    setattr(dato_base, d,True)
-                else:
-                    setattr(dato_base, d,False)
-        db.session.commit()
-    except Exception:
-        pass 
+    print(form)
+    if form['to_turn']=='sensor_intensidad':
+        setattr(dato_base, form['to_turn'],form.to_dict()['intensidad'])
+    if getattr(dato_base,form['to_turn']):
+        setattr(dato_base, form['to_turn'],False)
+    else:
+        setattr(dato_base, form['to_turn'],True)
+
+    db.session.commit() 
     
 
 @app.before_first_request
