@@ -13,26 +13,26 @@ class Dispositivos(db.Model):
     _id = db.Column("id",db.Integer,primary_key=True)
     luz_1 = db.Column(db.Boolean)
     led = db.Column(db.Boolean)
+    sensor_intensidad = db.Column(db.Integer)
     sensor_movimiento = db.Column(db.Boolean)
     sensor_luminosidad = db.Column(db.Boolean)
-    sensor_intensidad = db.Column(db.Integer)
 
     def __init__(self,luz_1):
         self.luz_1 = luz_1
         self.led = False
         self.sensor_luminosidad = False
         self.sensor_movimiento = False
-        self.sensor_intensidad = 0
+        self.sensor_intensidad
 
 class DispositivosSchema(ma.SQLAlchemySchema):
     class Meta:
         model = Dispositivos
+    sensor_intensidad = ma.auto_field()
     _id = ma.auto_field()
     luz_1 = ma.auto_field()
     led = ma.auto_field()
     sensor_movimiento = ma.auto_field()
     sensor_luminosidad = ma.auto_field()
-    sensor_intensidad = ma.auto_field()
 
 
 @app.route("/")
@@ -75,24 +75,24 @@ def handle_data():
 
 def checkValues(dispositivos_validos,form):
     dato_base =  Dispositivos.query.filter(Dispositivos._id == 1).first()
-    print(form)
     if form['to_turn']=='sensor_intensidad':
-        setattr(dato_base, form['to_turn'],form.to_dict()['intensidad'])
-    if getattr(dato_base,form['to_turn']):
-        setattr(dato_base, form['to_turn'],False)
+        setattr(dato_base, 'sensor_intensidad',form['value'])
     else:
-        setattr(dato_base, form['to_turn'],True)
-
+        if getattr(dato_base,form['to_turn']):
+            setattr(dato_base, form['to_turn'],False)
+        else:
+            setattr(dato_base, form['to_turn'],True)
     db.session.commit() 
-    
+
 
 @app.before_first_request
 def create_tables():
     db.create_all()
     dispositivo = Dispositivos(False)
-    db.session.add(dispositivo)
-    db.session.commit()
-
+    dato_base =  Dispositivos.query.filter(Dispositivos._id == 1).first()
+    if(dato_base == None):
+        db.session.add(dispositivo)
+        db.session.commit()
 
 if __name__ == "__main__":
     app.run(debug=True)
