@@ -9,7 +9,6 @@
          class="p-5 text-center bg-image"
          style="
          background-image: url('https://images.unsplash.com/photo-1536195892759-c8a3c8e1945e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2127&q=80');
-         height: 100vh;
          "
          >
    </head>
@@ -53,6 +52,7 @@
 
              </div>
         </div>
+        <input type="color"  id="test" value="#0000ff" onclick="nueva()"></a>
     </div>
     </div>
 
@@ -75,6 +75,14 @@
         }
         function led(){
                 fetch(`${window.location}/handle_data?to_turn=${"sensor_intensidad"}&value=${document.getElementById("customRange2").value}`,{
+                        method: "POST"
+                })
+
+        }
+        function nueva(){
+                var fav = encodeURIComponent(document.getElementById("test").value)
+                console.log(fav)
+                fetch(`${window.location}/handle_data?to_turn=${"test"}&value=${fav}`,{
                         method: "POST"
                 })
 

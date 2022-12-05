@@ -16,13 +16,19 @@ class Dispositivos(db.Model):
     sensor_intensidad = db.Column(db.Integer)
     sensor_movimiento = db.Column(db.Boolean)
     sensor_luminosidad = db.Column(db.Boolean)
+    red = db.Column(db.Integer)
+    green = db.Column(db.Integer)
+    blue = db.Column(db.Integer)
 
     def __init__(self,luz_1):
         self.luz_1 = luz_1
         self.led = False
         self.sensor_luminosidad = False
         self.sensor_movimiento = False
-        self.sensor_intensidad
+        self.sensor_intensidad = 0
+        self.red=255
+        self.green=255
+        self.blue=255
 
 class DispositivosSchema(ma.SQLAlchemySchema):
     class Meta:
@@ -33,6 +39,10 @@ class DispositivosSchema(ma.SQLAlchemySchema):
     led = ma.auto_field()
     sensor_movimiento = ma.auto_field()
     sensor_luminosidad = ma.auto_field()
+    red = ma.auto_field()
+    green = ma.auto_field()
+    blue = ma.auto_field()
+
 
 
 @app.route("/")
@@ -69,12 +79,20 @@ def encender_sensores():
 
 @app.route('/handle_data', methods=['POST'])
 def handle_data():
-    dispositivos_validos = ['luz_1','led','sensor_movimiento','sensor_luminosidad','sensor_intensidad']
+    dispositivos_validos = ['test','luz_1','led','sensor_movimiento','sensor_luminosidad','sensor_intensidad']
     checkValues(dispositivos_validos,request.args.to_dict())
     return "test"
 
 def checkValues(dispositivos_validos,form):
     dato_base =  Dispositivos.query.filter(Dispositivos._id == 1).first()
+    if form['to_turn']=='test':
+        h = form['value'].lstrip('#')
+        RGB = tuple(int(h[i:i+2], 16) for i in (0, 2, 4))
+        setattr(dato_base, 'red',RGB[0])
+        setattr(dato_base, 'green',RGB[1])
+        setattr(dato_base, 'blue',RGB[2])
+        db.session.commit() 
+        return 0
     if form['to_turn']=='sensor_intensidad':
         setattr(dato_base, 'sensor_intensidad',form['value'])
     else:
@@ -83,6 +101,7 @@ def checkValues(dispositivos_validos,form):
         else:
             setattr(dato_base, form['to_turn'],True)
     db.session.commit() 
+    return 0
 
 
 @app.before_first_request
