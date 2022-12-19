@@ -58,9 +58,20 @@ void loop() {
         if (httpCode == HTTP_CODE_OK || httpCode == HTTP_CODE_MOVED_PERMANENTLY) {
           String payload = http.getString();
           
-          Serial.print(payload); 
-          portOne.print(payload); 
+          
+          uint8_t xorTemp = uint8_t(payload.charAt(0));
+          for(int i = 1; i < payload.length() - 1; i++){
+             xorTemp = xorTemp + uint8_t(payload.charAt(i));
+          }
+          int length = payload.length();
+          
+
+          //payload = payload+"*"+String(xorTemp, HEX);
+          Serial.println(payload); 
+          portOne.println(payload); 
         }
+      } else {
+ 
       }
       http.end();
     } else {
@@ -69,5 +80,5 @@ void loop() {
   }
   pinMode(LED_BUILTIN, OUTPUT);
   digitalWrite(LED_BUILTIN, HIGH);
-  delay(500);
+  delay(5000);
 }
